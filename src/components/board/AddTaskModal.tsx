@@ -5,6 +5,7 @@ import { Select } from '../ui/Select';
 import { Button } from '../ui/Button';
 import { useCreateTask } from '../../hooks/useBoardQueries';
 import { useBoardStore } from '../../store/boardStore';
+import { useToast } from '../../hooks/useToast';
 import type { NewTaskInput, TaskPriority, User } from '../../types/board';
 
 interface AddTaskModalProps {
@@ -29,6 +30,7 @@ export function AddTaskModal({ isOpen, onClose, users, activeSprintId }: AddTask
 
   const createTask = useCreateTask();
   const addTaskToColumn = useBoardStore((s) => s.addTaskToColumn);
+  const { toast } = useToast();
 
   const resetForm = () => {
     setTitle('');
@@ -53,10 +55,13 @@ export function AddTaskModal({ isOpen, onClose, users, activeSprintId }: AddTask
 
     createTask.mutate(input, {
       onSuccess: (newTask) => {
-        // New tasks always land in Backlog
         addTaskToColumn(newTask.id, 'backlog');
+        toast.success(`"${newTask.title}" added to Backlog`);
         resetForm();
         onClose();
+      },
+      onError: () => {
+        toast.error('Failed to create task. Please try again.');
       },
     });
   };

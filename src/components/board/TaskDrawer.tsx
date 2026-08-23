@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import type { Task, TaskPriority, User } from '../../types/board';
 import { useComments, useAddComment, useUpdateTask, useDeleteTask } from '../../hooks/useBoardQueries';
 import { useBoardStore } from '../../store/boardStore';
+import { useToast } from '../../hooks/useToast';
 import { Button } from '../ui/Button';
 import { Select } from '../ui/Select';
 import { DeleteConfirmModal } from './DeleteConfirmModal';
@@ -43,8 +44,16 @@ export function TaskDrawer({ task, users, onClose }: TaskDrawerProps) {
 
   const usersById = new Map(users.map((u) => [u.id, u]));
 
+  const { toast } = useToast();
+
   const handleSaveEdits = () => {
-    updateTask.mutate({ id: task.id, changes: { description, priority, assigneeId } });
+    updateTask.mutate(
+      { id: task.id, changes: { description, priority, assigneeId } },
+      {
+        onSuccess: () => toast.success('Changes saved'),
+        onError: () => toast.error('Failed to save changes'),
+      },
+    );
   };
 
   const handleAddComment = (e: FormEvent) => {
@@ -63,8 +72,10 @@ export function TaskDrawer({ task, users, onClose }: TaskDrawerProps) {
       onSuccess: () => {
         removeTaskFromColumn(task.id);
         setShowDeleteConfirm(false);
+        toast.info(`"${task.title}" deleted`);
         onClose();
       },
+      onError: () => toast.error('Failed to delete task'),
     });
   };
 

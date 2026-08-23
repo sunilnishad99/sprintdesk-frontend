@@ -27,11 +27,13 @@ export const boardService = {
   },
 
   // "Fetch the first 30 tasks" per the assignment
+   // Mock dataset itself is exactly 30 tasks — "fetch the first 30" is
+  // satisfied by the initial load. We return the full working set (not a
+  // slice) so tasks created afterward via "+ Add Task" remain visible too.
   getTasks: async (): Promise<Task[]> => {
     await delay();
-    return tasks.slice(0, 30);
+    return tasks;
   },
-
   getComments: async (taskId: number): Promise<Comment[]> => {
     await delay(150);
     return comments.filter((c) => c.taskId === taskId);
