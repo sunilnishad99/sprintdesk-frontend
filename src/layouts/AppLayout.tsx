@@ -20,7 +20,7 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <header className="border-b bg-white">
         <nav
           className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3"

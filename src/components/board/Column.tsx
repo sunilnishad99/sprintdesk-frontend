@@ -23,7 +23,7 @@ export function Column({ status, title, taskIds, tasksById, usersById, onTaskCli
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
   return (
-    <div className="flex w-72 flex-shrink-0 flex-col">
+    <div className="flex w-full min-w-0 flex-col">
       <div className={`flex items-center justify-between border-t-4 ${columnAccent[status]} rounded-t-md bg-gray-100 px-3 py-2`}>
         <h2 className="text-sm font-semibold text-gray-700">{title}</h2>
         <span className="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-gray-500">

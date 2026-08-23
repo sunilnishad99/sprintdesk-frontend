@@ -174,7 +174,7 @@ export function Board() {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-4 overflow-x-auto pb-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {COLUMN_DEFS.map(({ status, title }) => (
             <Column
               key={status}
