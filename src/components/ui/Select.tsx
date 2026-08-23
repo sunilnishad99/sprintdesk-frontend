@@ -18,7 +18,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
     return (
       <div className="flex flex-col gap-1">
-        <label htmlFor={selectId} className="text-sm font-medium text-gray-700">
+        <label htmlFor={selectId} className="text-sm font-medium text-gray-700 dark:text-gray-300">
           {label}
         </label>
         <select
@@ -27,7 +27,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           aria-invalid={Boolean(error)}
           className={`rounded-md border px-3 py-2 text-sm shadow-sm
             focus:outline-none focus:ring-2 focus:ring-indigo-500
-            ${error ? 'border-red-500' : 'border-gray-300'} ${className}`}
+            dark:bg-gray-800 dark:text-gray-100
+            ${error ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} ${className}`}
           {...props}
         >
           {options.map((opt) => (
@@ -37,7 +38,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           ))}
         </select>
         {error && (
-          <p className="text-sm text-red-600" role="alert">
+          <p className="text-sm text-red-600 dark:text-red-400" role="alert">
             {error}
           </p>
         )}

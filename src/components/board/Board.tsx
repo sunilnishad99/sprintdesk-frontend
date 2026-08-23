@@ -4,6 +4,7 @@ import {
   DragOverlay,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   closestCorners,
   useSensor,
   useSensors,
@@ -52,10 +53,10 @@ export function Board() {
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
 
-  // Seed column order once tasks first arrive from the "server"
   useMemo(() => {
     if (tasks.length > 0) hydrateFromTasks(tasks);
   }, [tasks, hydrateFromTasks]);
@@ -96,8 +97,6 @@ export function Board() {
     const fromStatus = findColumnOfTask(taskId);
     if (!fromStatus) return;
 
-    // `over.id` is either another task's id (dropped on a card) or a column
-    // status (dropped on empty column space)
     const overId = over.id;
     const isOverColumn = COLUMN_DEFS.some((c) => c.status === overId);
     const toStatus: TaskStatus = isOverColumn
@@ -112,7 +111,6 @@ export function Board() {
 
     moveTask({ taskId, fromStatus, toStatus, toIndex: toIndex < 0 ? 0 : toIndex });
 
-    // Persist the status change server-side when a task crosses columns
     if (fromStatus !== toStatus) {
       updateTask.mutate({ id: taskId, changes: { status: toStatus } });
     }
@@ -125,9 +123,9 @@ export function Board() {
   if (isLoading) {
     return (
       <div className="p-6">
-        <div className="flex gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {COLUMN_DEFS.map((c) => (
-            <div key={c.status} className="h-96 w-72 animate-pulse rounded-md bg-gray-100" />
+            <div key={c.status} className="h-96 animate-pulse rounded-md bg-gray-100 dark:bg-gray-800" />
           ))}
         </div>
       </div>
@@ -137,7 +135,7 @@ export function Board() {
   if (isError) {
     return (
       <div className="p-6">
-        <p className="text-sm text-red-600">Failed to load tasks. Please try refreshing.</p>
+        <p className="text-sm text-red-600 dark:text-red-400">Failed to load tasks. Please try refreshing.</p>
       </div>
     );
   }
@@ -145,7 +143,7 @@ export function Board() {
   return (
     <div className="p-6">
       <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
-        <h1 className="text-xl font-semibold text-gray-900">Sprint Board</h1>
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Sprint Board</h1>
 
         <div className="flex flex-wrap items-end gap-3">
           <div className="w-40">

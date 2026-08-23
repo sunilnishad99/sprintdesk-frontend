@@ -13,7 +13,6 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Prevent authenticated users from seeing /login
   if (isAuthenticated) {
     const redirectTo = (location.state as { from?: string })?.from ?? '/dashboard';
     return <Navigate to={redirectTo} replace />;
@@ -28,11 +27,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm rounded-lg bg-white p-8 shadow-sm">
-        <h1 className="mb-1 text-xl font-semibold text-gray-900">Sign in to SprintDesk</h1>
-        <p className="mb-6 text-sm text-gray-500">
-          Use a DummyJSON test account, e.g. <code>emilys</code> / <code>emilyspass</code>
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 dark:bg-gray-900">
+      <div className="w-full max-w-sm rounded-lg bg-white p-8 shadow-sm dark:bg-gray-800">
+        <h1 className="mb-1 text-xl font-semibold text-gray-900 dark:text-gray-100">
+          Sign in to SprintDesk
+        </h1>
+        <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
+          Use a DummyJSON test account, e.g.{' '}
+          <code className="rounded bg-gray-100 px-1 dark:bg-gray-700">emilys</code> /{' '}
+          <code className="rounded bg-gray-100 px-1 dark:bg-gray-700">emilyspass</code>
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
@@ -55,7 +58,7 @@ export default function LoginPage() {
           />
 
           {login.isError && (
-            <p role="alert" className="text-sm text-red-600">
+            <p role="alert" className="text-sm text-red-600 dark:text-red-400">
               Invalid username or password. Please try again.
             </p>
           )}
