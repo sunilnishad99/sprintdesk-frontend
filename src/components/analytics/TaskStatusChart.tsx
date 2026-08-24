@@ -22,7 +22,10 @@ export function TaskStatusChart({ data }: { data: StatusDatum[] }) {
             cy="50%"
             outerRadius={80}
             animationDuration={600}
-            label={(entry) => `${entry.label}: ${entry.count}`}
+                        label={(entry: unknown) => {
+              const d = entry as StatusDatum;
+              return `${d.label}: ${d.count}`;
+            }}
           >
             {data.map((entry) => (
               <Cell key={entry.status} fill={STATUS_COLORS[entry.status]} />
