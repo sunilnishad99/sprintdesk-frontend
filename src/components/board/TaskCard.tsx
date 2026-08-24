@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { Task, User } from '../../types/board';
@@ -14,7 +15,7 @@ const priorityClasses: Record<Task['priority'], string> = {
   low: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
 };
 
-export function TaskCard({ task, assignee, onClick }: TaskCardProps) {
+function TaskCardImpl({ task, assignee, onClick }: TaskCardProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: task.id,
   });
@@ -68,3 +69,8 @@ export function TaskCard({ task, assignee, onClick }: TaskCardProps) {
     </div>
   );
 }
+
+// Memoized: in a 30-task board, dragging or editing one card would
+// otherwise re-render all ~30 TaskCard instances on every state change.
+// React.memo skips re-render for cards whose task/assignee/onClick didn't change.
+export const TaskCard = memo(TaskCardImpl);
